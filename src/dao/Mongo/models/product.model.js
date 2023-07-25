@@ -12,5 +12,5 @@ let schema = new Schema({
 })
 
 schema.plugin(mongoosePaginate)
-let Product = model(collection,schema)
-export default Product
+let ProductModel = model(collection,schema)
+export default ProductModel

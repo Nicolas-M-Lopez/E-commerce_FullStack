@@ -1,5 +1,4 @@
 import { compareSync } from "bcrypt";
-import User from "../models/user.model.js";
 
 export default async function(req,res,next){
         let verified = compareSync(

@@ -9,5 +9,5 @@ let schema = new Schema({
 })
 
 
-let Cart = model(collection,schema)
-export default Cart
+let CartModel = model(collection,schema)
+export default CartModel
