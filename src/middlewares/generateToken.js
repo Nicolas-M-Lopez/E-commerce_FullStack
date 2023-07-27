@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken'
+import config from '../config/config.js'
 
 export default (req,res,next) => {
     let token = jwt.sign(
         { email:req.body.email },
-        process.env.SECRET,
+        config.SECRET_COOKIE,
         { expiresIn:60*60*24 }
     )
     

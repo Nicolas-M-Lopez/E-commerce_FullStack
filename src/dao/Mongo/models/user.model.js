@@ -11,5 +11,5 @@ const schema = new Schema({
     cart: {type: String}
 })
 
-const User = model(collection,schema)
-export default User
+const UserModel = model(collection,schema)
+export default UserModel

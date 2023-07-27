@@ -1,10 +1,10 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
 import GHStrategy from 'passport-github2'
-import User from "../models/user.model.js";
+import UserModel from "../dao/Mongo/models/user.model.js";
 import jwt from 'passport-jwt'
+import config from "./config.js";
 
-const {GH_CLIENT_ID,GH_CLIENT_SECRET} = process.env
 const callback = "http://localhost:8080/api/auth/github/callback"
 
 export default function initializePassport(){
@@ -13,7 +13,7 @@ export default function initializePassport(){
         )
     passport.deserializeUser(
         async(id,done)=>{
-            const user = await User.findById(id)
+            const user = await UserModel.findById(id)
             return done(null,user)
         }
     )
@@ -23,11 +23,11 @@ export default function initializePassport(){
             { passReqToCallback:true,usernameField:'email' }, //objeto de configuracion
             async (req,username,password,done) => {
                 try {
-                    let one = await User.findOne({ email:username })
+                    let one = await UserModel.findOne({ email:username })
                     if (one) {
                         return done(null,false)
                     } else {
-                        let user = await User.create(req.body)
+                        let user = await UserModel.create(req.body)
                         delete user.password        //para el registro no es necesario continuar/inyectar la contraseña a la propeidad user del objeto de requerimientos
                         return done(null,user)
                     }
@@ -41,14 +41,14 @@ export default function initializePassport(){
     passport.use(
         'github',
         new GHStrategy(
-            {clientID: GH_CLIENT_ID, clientSecret: GH_CLIENT_SECRET, callbackURL: callback},
+            {clientID: config.GH_CLIENT_ID, clientSecret: config.GH_CLIENT_SECRET, callbackURL: callback},
             async(accessToken,refreshToken,profile,done) => {
                 try {
-                    let one = await User.findOne({email:profile._json.login})
+                    let one = await UserModel.findOne({email:profile._json.login})
                     if(one){
                         return done(null,one)
                     }
-                    let user = await User.create({
+                    let user = await UserModel.create({
                         first_name: profile._json.name,
                         email: profile._json.login,
                         password: 'holas12345',
@@ -69,7 +69,7 @@ export default function initializePassport(){
             { usernameField:'email' },
             async (username,password,done) => {
                 try {
-                    let one = await User.findOne({ email:username })
+                    let one = await UserModel.findOne({ email:username })
                     if (one) {
                       return done(null,one)
                     }
@@ -91,7 +91,7 @@ export default function initializePassport(){
     passport.use(   //estrategia para jwt (SOLO SIRVE PARA AUTENTIAR USUARIOS)
     'jwt',
     new jwt.Strategy( 
-        {secretOrKey: process.env.SECRET, jwtFromRequest:jwt.ExtractJwt.fromExtractors([cookieExtractor])},
+        {secretOrKey: config.SECRET_COOKIE, jwtFromRequest:jwt.ExtractJwt.fromExtractors([cookieExtractor])},
         async(jwt_payload,done)=>{
             try {
                 return done(null,jwt_payload)

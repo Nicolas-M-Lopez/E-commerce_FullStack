@@ -1,12 +1,13 @@
 import server from "./app.js"
 import { connect } from "mongoose"
 import { Server } from "socket.io"
+import config from "./config/config.js"
 
+const port = config.port
 
-const port = process.env.PORT || 8080
 const ready = () => {
   console.log('Server ready on '+port)
-  connect(process.env.LINK_MONGO)
+  connect(config.LINK_MONGO)
     .then(()=>console.log('database connected'))
     .catch(err => console.log(err))
 }

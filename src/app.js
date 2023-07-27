@@ -1,17 +1,15 @@
 import express from "express";
-import "dotenv/config.js"
 import morgan from "morgan"
 import error_handler from "./middlewares/error_handler.js";
 import not_found_handler from "./middlewares/not_found_handler.js";
 import index_router from "./routes/index.js";
 import { __dirname } from "./utils.js";
 import { engine } from "express-handlebars";
-import MongoStore from "connect-mongo";
 import initializePassport from './config/passport_local.js'
 import passport from "passport";
 import expressSession from 'express-session'
 import cookieParser from 'cookie-parser'
-
+import config from "./config/config.js";
 
 
 const server = express()
@@ -22,9 +20,9 @@ server.set('view engine', 'handlebars')
 server.set('views', __dirname+'/views')
 
 
-server.use(cookieParser(process.env.SECRET_COOKIE))
+server.use(cookieParser(config.SECRET_COOKIE))
 server.use(expressSession({
-    secret: process.env.SECRET_SESSION,
+    secret: config.SECRET_SESSION,
     resave: true,
     saveUninitialized: true
 }))
