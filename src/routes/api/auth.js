@@ -31,7 +31,7 @@ auth_router.get('/fail-signin', userController.failSignIn)
 
 auth_router.post('/signout', passport_call('jwt', {session:false}), userController.signOut)
           
- auth_router.get('/current',passport_call('jwt'),authorizationJwt('user'), userController.current);
+ auth_router.get('/current',passport_call('jwt'),authorizationJwt('admin'), userController.current);
           
 
 export default auth_router

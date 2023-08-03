@@ -7,7 +7,9 @@ const config = {
     SECRET_SESSION: process.env.SECRET_SESSION,
     GH_CLIENT_ID: process.env.GH_CLIENT_ID,
     GH_CLIENT_SECRET: process.env.GH_CLIENT_SECRET,
-    SECRET_COOKIE: process.env.SECRET_COOKIE
+    SECRET_COOKIE: process.env.SECRET_COOKIE,
+    GM_PASS: process.env.GM_PASS,
+    GM_USER: process.env.GM_USER
 }
 
 export default config

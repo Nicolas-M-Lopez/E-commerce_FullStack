@@ -1,63 +1,84 @@
 import { response } from "express";
 import CartModel from "./models/cart.model.js";
 import ProductModel from "./models/product.model.js";
+import TicketModel from "./models/ticket.model.js";
+import sendMail from "../../middlewares/sendMail.js";
+
 
 class CartDaoMongo {
     constructor() {
         this.CartModel = CartModel
     }
     
-    getCarts = async() =>{
+    get = async() =>{
         return await CartModel.aggregate([
             { $unwind: "$productos" }, 
             { $lookup: { from: 'products', localField: 'productos.productId', foreignField: '_id', as: 'productos.product' } },
             { $sort: { "productos.product.title": 1 } } 
         ])
     }
-    getCart = async(cid) =>{
+    getById = async(cid) =>{
         return await CartModel.findById(cid).populate('productos.productId', 'title price _id')
     }
-    createCart = async() =>{
+    create = async() =>{
         return await CartModel.create({productos:[]})
     }
-    updateCart = async(cid,dataProduct,dataUnits) =>{
+    update = async(cid,dataProduct,dataUnits) =>{
         const cart = await CartModel.findById(cid);
         if (cart.productos.some((p) => p.productId.toString() === dataProduct)) {
-            await ProductModel.updateOne(
-                { _id: dataProduct },
-                { $inc: { stock: -dataUnits } }
-              );
           return await CartModel.updateOne(
             { _id: cid, 'productos.productId': dataProduct },
             { $inc: { 'productos.$.quantity': dataUnits } }
           );
         } else {
-            await ProductModel.updateOne(
-            { _id: dataProduct },
-            { $inc: { stock: -dataUnits } }
-            );
             return await CartModel.updateOne(
             { _id: cid },
             { $push: { productos: { productId: dataProduct, quantity: dataUnits } } }
           );
         }
     }
-    deleteCart = async(cid,dataProduct,dataUnits) =>{
+    delete = async(cid,dataProduct,dataUnits) =>{
+        console.log(dataProduct)
         const cart = await CartModel.findById(cid)
-        const product = cart.productos.find((product) => product.productId == dataProduct);
-
+        const product = cart.productos.find((product) => product.productId.equals(dataProduct));
+        console.log(product)
         if (!product) {
-            return res.status(404).json({ success: false, message: 'Producto no encontrado en el carrito' });
+            return console.log('No encontrado')
           }
           product.quantity -= dataUnits;
-          await ProductModel.updateOne(
-              { _id: dataProduct },
-              { $inc: { stock: dataUnits } }
-          )
-          if (product.quantity <= 0) {y
-            cart.productos = cart.productos.filter((p) => p.productId != dataProduct);
+          if (product.quantity <= 0) {
+            console.log('entro al cart')
+            cart.productos = cart.productos.filter((p) => p.productId.toString() != dataProduct.toString());
           }
         return await cart.save()
+    }
+
+    purchase = async(cid,tokenEmail) => {
+        const cart = await CartModel.findById(cid)
+        let totalAmount = 0
+        for(const producto of cart.productos) {
+          let productToUpdate = await ProductModel.findById(producto.productId)
+          let newStock = parseInt(productToUpdate.stock) - parseInt(producto.quantity)
+          if(newStock >= 0){
+          await ProductModel.updateOne({_id: productToUpdate._id},{$set:{stock: newStock}})
+          totalAmount += productToUpdate.price * producto.quantity
+          await this.delete(cid,producto.productId,producto.quantity)
+          }else{
+            console.log('No se hay suficiente stock en este producto: '+ productToUpdate)}
+        }
+        
+        const generateRandomCode = (length = 10) => {
+          const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+          return Array.from({ length }, () => charset[Math.floor(Math.random() * charset.length)]).join('');
+        }; 
+        const ticketData = {
+          code:generateRandomCode(),
+          amount: totalAmount,
+          purchaser: tokenEmail
+        }
+          const ticket = await TicketModel.create(ticketData)
+          await sendMail(ticketData)
+          console.log('Ticket creado correctamente: ', ticket)
     }
 
     getBill = async(cid)=>{

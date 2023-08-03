@@ -20,7 +20,7 @@ class ProductManager{
       }
     }
 
-    async addProduct({title,description,price,thumbnail,stock}){
+    async create({title,description,price,thumbnail,stock}){
       try{
         console.log("entre al add")
         const productExistente = this.products.find(product => product.title === title)
@@ -47,7 +47,7 @@ class ProductManager{
     }
 }
 
-    getProducts(){
+    get(){
       try{
         console.log("entre al get ")
         if (this.products === []){
@@ -62,7 +62,7 @@ class ProductManager{
         
     }
 
-    getProductById(id){
+    getById(id){
       try{
         console.log("entre al get ID")
         console.log(id)
@@ -82,10 +82,10 @@ class ProductManager{
     
     }
 
-    async updateProduct(id,product) {  
+    async update(id,product) {  
       try {
         console.log("enrte al update")
-          let productExistente = this.getProductById(id)
+          let productExistente = this.getById(id)
           if(productExistente){
             for (let prop in product) {
               productExistente[prop] = product[prop]
@@ -104,10 +104,10 @@ class ProductManager{
       }
   }
 
-  async deleteProduct(id) {
+  async delete(id) {
     try {
       console.log("entre al delete")
-        if(this.getProductById(id)){
+        if(this.getById(id)){
           this.products = this.products.filter(each=>each.id!==id)
           let productJson = JSON.stringify(this.products,null,2)
           await fs.promises.writeFile(this.path,productJson)

@@ -5,19 +5,19 @@ class ProductDaoMongo {
         this.ProductModel = ProductModel
     }
     
-    getProducts = async(page,limit,titleRegex) =>{
+    get = async(page,limit,titleRegex) =>{
         return await ProductModel.paginate({title: titleRegex}, {limit, page})
     }
-    getProduct = async(pid) =>{
+    getById = async(pid) =>{
         return await ProductModel.findById(pid)
     }
-    createProduct = async(data) =>{
+    create = async(data) =>{
         return await ProductModel.create(data)
     }
-    updateProduct = async(pid,data) =>{
+    update = async(pid,data) =>{
         return await ProductModel.findByIdAndUpdate(pid, data, {new:true})
     }
-    deleteProduct = async(pid) =>{
+    delete = async(pid) =>{
         return await ProductModel.findByIdAndDelete(pid)
     }
 }

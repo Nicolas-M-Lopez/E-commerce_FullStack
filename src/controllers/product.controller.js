@@ -24,7 +24,7 @@ class ProductController {
     getProduct = async(req,res,next)=>{
         try{
             const {pid} = req.params
-            const one = await productDao.getProduct(pid)
+            const one = await productDao. getProduct(pid)
             if(one){
                 return res.json({ status:200,one })
             } 
