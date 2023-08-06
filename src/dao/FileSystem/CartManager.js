@@ -22,17 +22,17 @@ class CartManager {
     }
   }
 
-  async updateCart(cartId, productId, units) {
+  async update(cartId, productId, units) {
     try {
       console.log("entre al cart update")
-      let cartExistente = this.getCartById(cartId)
+      let cartExistente = this.get(cartId)
       if(cartExistente){
         console.log(Number(productId))
-        let producto = product.getProductById(productId)
+        let producto = product.get(productId)
         console.log(units)
       if(units <= producto.stock){
         let updateStock = producto.stock - units
-        await product.updateProduct(productId, {stock:updateStock})
+        await product.update(productId, {stock:updateStock})
         if(!cartExistente.productos){
           cartExistente.productos = [];
         }
@@ -65,7 +65,7 @@ class CartManager {
     }
   }  
 
- async addCart(){
+ async create(){
   console.log("entre al cart add")
     let data = {productos:[]}
     if (this.carts.length>0) {
@@ -81,7 +81,7 @@ class CartManager {
       return 201
   }
 
-  getCarts(){
+  get(){
     console.log("entre al cart get")
     try{
       if (this.carts === []){
@@ -98,7 +98,7 @@ class CartManager {
     }
   }
 
-  getCartById(cid){
+  getById(cid){
     console.log("entre al cart get ID")
 
     try{
@@ -113,17 +113,17 @@ class CartManager {
     }  
   } 
 
-  async deleteCart(cId,pId,units){
+  async delete(cId,pId,units){
     console.log("entre al cart delete")
 
-    let cartExistente = this.getCartById(cId)
+    let cartExistente = this.getById(cId)
     if(cartExistente){
       let productInCart = this.getProductInCartById(cId, pId)
       if(productInCart){
-        let producto = product.getProductById(pId)
+        let producto = product.getById(pId)
         if (units === productInCart.quantity) {
           let updateStock = producto.stock + units
-          await product.updateProduct(pId, {stock:updateStock})
+          await product.update(pId, {stock:updateStock})
           cartExistente.productos = cartExistente.productos.filter((p) => p.idProducto !== pId)
           let data_json = JSON.stringify(this.carts, null, 2);
           await fs.promises.writeFile(this.path, data_json);
@@ -132,7 +132,7 @@ class CartManager {
           let updateStock = producto.stock + units
           productInCart.quantity -= units
           console.log(productInCart)
-          await product.updateProduct(pId, {stock:updateStock})
+          await product.update(pId, {stock:updateStock})
           let data_json = JSON.stringify(this.carts, null, 2);
           await fs.promises.writeFile(this.path, data_json);
           return 200
@@ -144,7 +144,7 @@ class CartManager {
   getProductInCartById(cartId, productId) {
     console.log("entre al cart get Product in Cart")
 
-    const cart = this.getCartById(cartId)
+    const cart = this.getById(cartId)
     if (cart && cart.productos) {
       const productInCart = cart.productos.find(p => p.idProducto === productId)
       if (productInCart) {

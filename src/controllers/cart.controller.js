@@ -1,4 +1,6 @@
 import {cartService} from "../services/index.js"
+import jwt from 'jsonwebtoken'
+import config from '../config/config.js'
 
 const cartDao = cartService
 
@@ -56,7 +58,6 @@ class CartController{
             const cid = req.params.cid
             const dataProduct = req.params.pid
             const dataUnits = req.params.units
-            
             const cart = await cartDao.deleteCart(cid,dataProduct,dataUnits);
             return res.status(200).json({
                 success: true,
@@ -64,6 +65,25 @@ class CartController{
             })
         } catch (error) {
            next(error)
+        }
+    }
+
+    purchaseCart = async(req,res,next) => {
+        try {
+            const cid = req.params.cid
+            const token = req.cookies.token
+            const decodedToken = jwt.verify(token, config.SECRET_COOKIE);
+            const tokenEmail = decodedToken.email;
+            const purchase = await cartDao.purchaseCart(cid,tokenEmail)
+            console.log(purchase)
+            if(purchase){ 
+            return res.status(201).json({
+                    succes: true,
+                    response: purchase
+                })
+            }
+        } catch (error) {
+            next(error)
         }
     }
     getBill = async(req,res,next)=>{
