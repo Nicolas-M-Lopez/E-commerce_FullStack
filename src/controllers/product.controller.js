@@ -1,4 +1,7 @@
 import { productService } from "../services/index.js";
+import CustomError from "../utils/error/customError.js";
+import EErrors from "../utils/error/enums.js";
+import generateProductErrorInfo from "../utils/error/info.js";
 
 const productDao = productService
 
@@ -37,12 +40,19 @@ class ProductController {
         }
     createProduct = async (req,res,next)=>{
         try{
-        const data = req.body
-        let newProduct = await productDao.createProduct(data)
+        const {title,description,stock,price,thumbnail} = req.body
+        if( !title || !description || !stock || !price ){
+            CustomError.createError({
+                name: 'Create Product Error',
+                cause: generateProductErrorInfo(title,stock,price,description),
+                message: 'Error al crear el producto',
+                code: EErrors.INVALID_TYPE_ERROR
+            })
+        }
+        let newProduct = await productDao.createProduct({title,description,stock,price,thumbnail})
         if (newProduct) {
             return res.redirect('http://localhost:8080/products')
         }
-        return res.json({ status:400,message:'not created'})
      } catch(error){
         next(error)
      }

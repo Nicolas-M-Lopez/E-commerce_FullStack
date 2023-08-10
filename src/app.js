@@ -10,6 +10,7 @@ import passport from "passport";
 import expressSession from 'express-session'
 import cookieParser from 'cookie-parser'
 import config from "./config/config.js";
+import errorMiddleware from "./middlewares/errors/index.js";
 
 
 const server = express()
@@ -36,7 +37,7 @@ server.use(passport.initialize())
 
 
 server.use('/', index_router)
-server.use(error_handler)
+server.use(errorMiddleware)
 server.use(not_found_handler)
 
  
