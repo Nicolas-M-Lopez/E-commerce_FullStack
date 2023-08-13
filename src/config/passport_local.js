@@ -5,6 +5,9 @@ import UserModel from "../dao/Mongo/models/user.model.js";
 import jwt from 'passport-jwt'
 import config from "./config.js";
 import UserDTO from "../dto/user.dto.js";
+import CustomError from "../utils/error/customError.js";
+import EErrors from "../utils/error/enums.js";
+import generateUserErrorInfo from "../utils/error/generateUserErrorInfo.js";
 
 const callback = "http://localhost:8080/api/auth/github/callback"
 
@@ -29,6 +32,15 @@ export default function initializePassport(){
                         return done(null,false)
                     } else {
                         let {first_name,last_name,email,age,password} = req.body
+                        if(!first_name || !last_name || !email){
+
+                            CustomError.createError({
+                                name: 'Create User Error',
+                                cause: generateUserErrorInfo(first_name,last_name,email),
+                                message: 'Error al crear el usuario',
+                                code: EErrors.INVALID_TYPE_ERROR
+                            }) 
+                        }
                         let newUser = new UserDTO({first_name,last_name,email,age,password})
                         let user = await UserModel.create(newUser)
                         delete user.password        //para el registro no es necesario continuar/inyectar la contraseña a la propeidad user del objeto de requerimientos
