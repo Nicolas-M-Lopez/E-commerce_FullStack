@@ -11,6 +11,7 @@ import expressSession from 'express-session'
 import cookieParser from 'cookie-parser'
 import config from "./config/config.js";
 import errorMiddleware from "./middlewares/errors/index.js";
+import {addLogger} from "./config/logger.js";
 
 
 const server = express()
@@ -33,7 +34,7 @@ server.use(express.urlencoded({extended:true}))
 server.use(morgan('dev'))
 initializePassport()
 server.use(passport.initialize())
-
+server.use(addLogger)
 
 
 server.use('/', index_router)

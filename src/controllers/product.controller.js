@@ -1,3 +1,4 @@
+import { logger } from "../config/logger.js";
 import { productService } from "../services/index.js";
 import CustomError from "../utils/error/customError.js";
 import EErrors from "../utils/error/enums.js";
@@ -21,6 +22,7 @@ class ProductController {
                 return res.json({ status:404,message })
             }
         } catch(error){
+            logger.error(error)
             next(error) 
         }
     }
@@ -35,6 +37,7 @@ class ProductController {
                 return res.json({ status:404,message })
                
             } catch(error){
+                logger.error(error)
                 next(error)
             }
         }
@@ -54,6 +57,7 @@ class ProductController {
             return res.redirect('http://localhost:8080/products')
         }
      } catch(error){
+        logger.error(error)
         next(error)
      }
     }
@@ -67,6 +71,7 @@ class ProductController {
             }
             return res.json({ status:404,message:'not found'})
         } catch(error){
+            logger.error(error)
             next(error)
         }
     }
@@ -79,6 +84,7 @@ class ProductController {
             }
             return res.json({ status:404,message:'not found'})
         } catch(error){
+            logger.error(error)
             next(error)
         }
     }

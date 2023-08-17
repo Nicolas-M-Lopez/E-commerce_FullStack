@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import config from '../config/config.js'
 import UserDTO from '../dto/user.dto.js'
+import { logger } from '../config/logger.js'
 
 class UserController{
     register = (req,res) => res.status(201).json({
@@ -31,7 +32,7 @@ class UserController{
             role: req.user.role
         }
         let token = jwt.sign(user, config.SECRET_COOKIE, { expiresIn:60*60*24 })
-        console.log(token)
+        logger.info(token)
         res.cookie('token',token).send({token})
 }
 
@@ -48,7 +49,7 @@ class UserController{
 }
     current = (req, res) => {
         let user = new UserDTO({email: req.user.email})
-        console.log(user)
+        logger.info(user)
         res.json({ user })
     }
 }

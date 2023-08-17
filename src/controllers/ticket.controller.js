@@ -1,3 +1,4 @@
+import { logger } from "../config/logger.js";
 import { ticketService } from "../services/index.js";
 
 const ticketDao = ticketService
@@ -11,6 +12,7 @@ class TicketController{
                 reponse: ticket
             })
         } catch (error) {
+            logger.error(error)
             next(error)
         }
     }
