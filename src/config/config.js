@@ -1,6 +1,14 @@
-import "dotenv/config.js"
+import dotenv from "dotenv"
+import commander from "../utils/commander.js"
 
-const config = {
+const {mode} = commander.opts()
+
+dotenv.config({
+    path: mode == 'development' ? './.env.development' : './.env.production'
+})
+
+export default {
+    MODE: process.env.MODE,
     port: process.env.PORT || 8080,
     LINK_MONGO: process.env.LINK_MONGO,
     SECRET_COOKIE: process.env.SECRET_COOKIE,
@@ -12,4 +20,3 @@ const config = {
     GM_USER: process.env.GM_USER
 }
 
-export default config

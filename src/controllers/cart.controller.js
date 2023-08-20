@@ -1,6 +1,7 @@
 import {cartService} from "../services/index.js"
 import jwt from 'jsonwebtoken'
 import config from '../config/config.js'
+import { logger } from "../config/logger.js"
 
 const cartDao = cartService
 
@@ -13,6 +14,7 @@ class CartController{
                 response:carts
             })
         } catch (error) {
+            logger.error(error)
             next(error)
         }
     }
@@ -25,6 +27,7 @@ class CartController{
                 response:cart
             })
         } catch (error) {
+            logger.error(error)
             next(error)
         }
     }
@@ -36,6 +39,7 @@ class CartController{
                 message: 'id= '+one._id
             })
         } catch (error) {
+            logger.error(error)
             next(error)
         }
     }
@@ -50,7 +54,8 @@ class CartController{
                 response: updatedCart,
             });
         } catch (error) {
-           next(error)
+            logger.error(error)
+            next(error)
         }
     }
     deleteCart  = async(req,res,next)=> {
@@ -64,7 +69,8 @@ class CartController{
                 response: cart
             })
         } catch (error) {
-           next(error)
+            logger.error(error)
+            next(error)
         }
     }
 
@@ -83,6 +89,7 @@ class CartController{
                 })
             }
         } catch (error) {
+            logger.error(error)
             next(error)
         }
     }
@@ -100,6 +107,7 @@ class CartController{
                 response:total
             })
         } catch (error) {
+            logger.error(error)
             next(error)
         }
     }

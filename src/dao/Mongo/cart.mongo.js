@@ -3,6 +3,7 @@ import CartModel from "./models/cart.model.js";
 import ProductModel from "./models/product.model.js";
 import TicketModel from "./models/ticket.model.js";
 import sendMail from "../../middlewares/sendMail.js";
+import { logger } from "../../config/logger.js";
 
 
 class CartDaoMongo {
@@ -43,11 +44,10 @@ class CartDaoMongo {
         const product = cart.productos.find((product) => product.productId.equals(dataProduct));
         console.log(product)
         if (!product) {
-            return console.log('No encontrado')
+            return logger.warning('No encontrado')
           }
           product.quantity -= dataUnits;
           if (product.quantity <= 0) {
-            console.log('entro al cart')
             cart.productos = cart.productos.filter((p) => p.productId.toString() != dataProduct.toString());
           }
         return await cart.save()
@@ -64,7 +64,7 @@ class CartDaoMongo {
           totalAmount += productToUpdate.price * producto.quantity
           await this.delete(cid,producto.productId,producto.quantity)
           }else{
-            console.log('No se hay suficiente stock en este producto: '+ productToUpdate)}
+            logger.warning('No se hay suficiente stock en este producto: '+ productToUpdate)}
         }
         
         const generateRandomCode = (length = 10) => {
@@ -78,7 +78,7 @@ class CartDaoMongo {
         }
           const ticket = await TicketModel.create(ticketData)
           await sendMail(ticketData)
-          console.log('Ticket creado correctamente: ', ticket)
+          logger.info('Ticket creado correctamente: ', ticket)
     }
 
     getBill = async(cid)=>{
