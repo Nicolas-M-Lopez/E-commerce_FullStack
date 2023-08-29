@@ -8,7 +8,7 @@ import passport from "passport";
 import passport_call from "../../middlewares/passport_call.js";
 import authorizationJwt from "../../middlewares/authorizationJwt.js";
 import userController from "../../controllers/user.controller.js";
-
+import { userService } from "../../services/index.js";
 const auth_router = Router()
 
 auth_router.post('/register', validator, pass_is_8, create_hash, passport.authenticate(
@@ -31,7 +31,17 @@ auth_router.get('/fail-signin', userController.failSignIn)
 
 auth_router.post('/signout', passport_call('jwt', {session:false}), userController.signOut)
           
- auth_router.get('/current',passport_call('jwt'),authorizationJwt('admin'), userController.current);
+auth_router.get('/current',passport_call('jwt'),authorizationJwt('admin'), userController.current);
           
+auth_router.get('/premium/:uid', async(req,res,next)=>{
+    try {
+        const uid = req.params.uid
+        const changeRoles = await userService.changeRole(uid)
+        console.log(changeRoles,'000')
+        return res.status(200).json({mesage: "Rol cambiado"})
+    } catch (error) {
+        next(error)
+    }
+})
 
 export default auth_router

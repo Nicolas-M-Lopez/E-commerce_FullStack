@@ -1,4 +1,4 @@
-import {cartService} from "../services/index.js"
+import {cartService, productService} from "../services/index.js"
 import jwt from 'jsonwebtoken'
 import config from '../config/config.js'
 import { logger } from "../config/logger.js"
@@ -48,6 +48,8 @@ class CartController{
             const cid = req.params.cid
             const dataProduct = req.params.pid
             const dataUnits = req.params.units
+            const checkOwner = await productService.getProduct(dataProduct)
+            if(req.user.email == checkOwner.owner) return res.json({message: "Cant purchase and item from yourself"}) 
             const updatedCart = await cartDao.updateCart(cid,dataProduct,dataUnits);
             return res.status(200).json({
                 success: true,

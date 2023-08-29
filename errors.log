@@ -22,3 +22,4 @@ error: Este es el error
 error: Este es el error
 error: Este es el error
 fatal: Este es el fatal
+error: undefined {"code":11000,"index":0,"keyPattern":{"title":1},"keyValue":{"title":"Auto de prueba"}}
