@@ -12,9 +12,9 @@ cart_router.get('/:cid', cartController.getCart)
 
 cart_router.post('/', cartController.createCart)
 
-cart_router.put('/:cid/products/:pid/:units',passport_call('jwt'),authorizationJwt('user'), cartController.updateCart)
+cart_router.put('/:cid/products/:pid/:units',passport_call('jwt'),authorizationJwt('admin'), cartController.updateCart)
 
-cart_router.delete('/:cid/products/:pid/:units',passport_call('jwt'),authorizationJwt('user'), cartController.deleteCart)
+cart_router.delete('/:cid/products/:pid/:units',passport_call('jwt'),authorizationJwt('admin'), cartController.deleteCart)
 
 cart_router.post('/:cid/purchase',passport_call('jwt'),authorizationJwt('admin'),cartController.purchaseCart, ticketController.createTicket)
 

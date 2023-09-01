@@ -44,6 +44,7 @@ class ProductController {
     createProduct = async (req,res,next)=>{
         try{
         const {title,description,stock,price,thumbnail} = req.body
+        const owner = req.user.email 
         if( !title || !description || !stock || !price ){
             CustomError.createError({
                 name: 'Create Product Error',
@@ -52,7 +53,7 @@ class ProductController {
                 code: EErrors.INVALID_TYPE_ERROR
             })
         }
-        let newProduct = await productDao.createProduct({title,description,stock,price,thumbnail})
+        let newProduct = await productDao.createProduct({title,description,stock,price,thumbnail,owner})
         if (newProduct) {
             return res.redirect('http://localhost:8080/products')
         }

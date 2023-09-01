@@ -8,7 +8,8 @@ let schema = new Schema({
     description: { type:String,required:true },
     stock: { type:Number,required:true },
     price: { type:Number,required:true },
-    thumbnail: { type:String }
+    thumbnail: { type:String },
+    owner:{type:String, default: 'admin'}
 })
 
 schema.plugin(mongoosePaginate)
