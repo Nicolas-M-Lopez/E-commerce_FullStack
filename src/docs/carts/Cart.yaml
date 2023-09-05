@@ -1,0 +1,173 @@
+paths: 
+  /api/carts:
+    get:
+      summary: Obtiene todos los carritos 
+      tags: 
+        - Carts
+      responses:
+        "200":
+          description: Los carritos se obtuvieron correctamente
+        "500":
+          description: Error interno del server
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Cart'
+    post:
+      summary: Crea un solo carrito
+      tags: 
+        - Carts
+      responses:
+        "201":
+          description: El carrito se creo correctamente
+        "500":
+          description: Error interno del server
+  /api/carts/{cid}:
+    get:
+      summary: Obtiene un solo carrito
+      tags: 
+        - Carts
+      responses:
+        "200":
+          description: EL carrito se obtuvo correctamente
+        "500":
+          description: Error interno del server
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito que se solicita observar
+          schema:
+            $type: String
+  api/{cid}/products/{pid}/{units}:
+    put:
+      summary: Agrega un producto al carrito
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: El producto se agrego al carrito correctamente
+        "500":
+          description: Error interno del server
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito que se solicita actualizar
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: id del producto que se solicita agregar al carrito
+          schema:
+            $type: String
+        - name: units
+          in: path
+          required: true
+          description: Cantidad que desea agregar al carrito
+          schema:
+            $type: Number
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#components/requestBodies/updateCart'
+
+    delete:
+      summary: Elimina un producto al carrito
+      tags: 
+        - Carts
+      responses:
+        "200":
+          description: El producto se elimino del carrito correctamente
+        "500":
+          description: Error interno del server
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito que se solicita actualizar
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: id del producto que se solicita aliminar del carrito
+          schema:
+            $type: String
+        - name: units
+          in: path
+          required: true
+          description: Cantidad que desea eliminar del carrito
+          schema:
+            $type: Number
+  api/{cid}/purchase:
+    post:
+      summary: Confirma la compra del carrito
+      tags:
+        - Carts
+      responses:
+        "201":
+          description: La compra fue realizada correctamente
+        "500":
+          description: Error interno del server
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito que se quiere comprar
+          schema:
+            $type: String
+  api/bills/{cid}:
+    get: 
+      summary: Obtiene el monto total del carrito
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: El monto total fue enviado correctamente
+        "500":
+          description: Error interno del server
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: id del carrito que se solicita ver el precio final
+          schema:
+            $type: String
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties: 
+        id:
+          type: String
+          description: Id autogenerado de mongo del carrito
+        productID: 
+          type: String
+          description: Id autogenerado de mongo del producto
+        quantity:
+          type: Number
+          description: Cantidad del producto agregado al carrito
+      example:
+        _id: ObjectId("asdfasdasdagas5465as45s")
+        productID: ObjectId("gjhysdasdagas5465as45s")
+        quantity: 3
+  requestBodies:
+    updateCart:
+      type: object
+      properties: 
+        id:
+          type: String
+          description: Id autogenerado de mongo del carrito
+        productID: 
+          type: String
+          description: Id autogenerado de mongo del producto
+        quantity:
+          type: Number
+          description: Cantidad del producto agregado al carrito
