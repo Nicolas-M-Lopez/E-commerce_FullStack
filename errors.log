@@ -23,3 +23,4 @@ error: Este es el error
 error: Este es el error
 fatal: Este es el fatal
 error: undefined {"code":11000,"index":0,"keyPattern":{"title":1},"keyValue":{"title":"Auto de prueba"}}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"asdfasdfgfagas5465as45s\"","value":"asdfasdfgfagas5465as45s","valueType":"string"}
