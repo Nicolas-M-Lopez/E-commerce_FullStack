@@ -9,7 +9,7 @@ product_router.get('/',productController.getProducts)
 
 product_router.get('/:pid',productController.getProduct)
 
-product_router.post('/',passport_call('jwt'),authorizationJwt(['admin','premium']), productController.createProduct)
+product_router.post('/',/* passport_call('jwt'),authorizationJwt(['admin','premium']), */ productController.createProduct)
 
 product_router.put('/:pid',passport_call('jwt'),authorizationUD(['admin','premium']), productController.updateProduct)
 

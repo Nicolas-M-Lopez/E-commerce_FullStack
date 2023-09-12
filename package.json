@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "start": "nodemon ./src/server.js --mode production",
-    "dev": "nodemon ./src/server.js --mode development"
+    "dev": "nodemon ./src/server.js --mode development",
+    "testM": "mocha test/Users.test.js",
+    "testC": "mocha test/Carts.test.js",
+    "testS": "mocha test/supertest.test.js"
   },
   "repository": {
     "type": "git",
@@ -44,5 +47,10 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.8",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   }
 }
