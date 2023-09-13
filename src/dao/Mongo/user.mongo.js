@@ -13,7 +13,6 @@ class UserDaoMongo {
     }
 
     change = async(uid) => {
-        console.log(uid)
         const user = await UserModel.findById(uid)
         const newRole = user.role == 'user' ? 'premium' : 'user'
         return await UserModel.findOneAndUpdate({_id: uid}, {role: newRole})
