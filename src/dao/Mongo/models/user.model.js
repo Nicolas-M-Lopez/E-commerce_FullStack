@@ -8,7 +8,12 @@ const schema = new Schema({
     age: { type: Number },
     role: {type: String, default: 'user'},
     password: { type: String, required:true },
-    cart: {type: String}
+    cart: {type: String},
+    last_connection: {type: Date},
+    documents: [{
+        name: {type: String},
+        reference: {type: String}
+    }]
 })
 
 const UserModel = model(collection,schema)

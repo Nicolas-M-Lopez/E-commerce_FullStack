@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import config from '../config/config.js'
 import UserDTO from '../dto/user.dto.js'
 import { logger } from '../config/logger.js'
+import UserModel from '../dao/Mongo/models/user.model.js'
 
 class UserController{
     register = (req,res) => res.status(201).json({
@@ -26,12 +27,15 @@ class UserController{
         message: 'No Auth'
     })
 
-    sigIn = (req,res)=> {
+    sigIn = async (req,res)=> {
         let user = {
             email: req.body.email,
-            role: req.user.role
+            role: req.user.role,
+            _id: req.user._id
         }
         let token = jwt.sign(user, config.SECRET_COOKIE, { expiresIn:60*60*24 })
+        console.log(req.user._id)
+        await UserModel.findByIdAndUpdate(req.user._id, { last_connection: new Date() });
         logger.info(token)
         res.cookie('token',token).send({token})
 }
@@ -41,8 +45,9 @@ class UserController{
         message: 'error sign in'
     })
 
-    signOut = (req,res)=>{
-        return res.status(200).clearCookie('token').json({
+    signOut = async(req,res)=>{
+        await UserModel.findByIdAndUpdate(req.user._id, { last_connection: new Date() });
+        res.status(200).clearCookie('token').json({
         success: true,
         message: 'user signed out!'
     })
