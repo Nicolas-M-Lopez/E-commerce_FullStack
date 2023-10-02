@@ -14,6 +14,15 @@ class UserRepository{
         let result = await this.dao.change(uid)
         return result
     }
+    getUsers = async()=>{
+        let result = await this.dao.getAll()
+        return result
+    }
+
+    deleteUsers = async()=>{
+        let result = await this.dao.delete()
+        return result
+    }
 }
 
 export default UserRepository
