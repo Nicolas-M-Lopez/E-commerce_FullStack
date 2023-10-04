@@ -54,4 +54,8 @@ auth_router.post('/:uid/documents', uploader.any(), (req,res,next) => {
     }  
 })
 
+auth_router.get('/', userController.getAllUsers)
+
+auth_router.delete('/', userController.deleteUsers)
+
 export default auth_router

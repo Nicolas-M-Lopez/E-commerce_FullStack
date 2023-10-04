@@ -12,7 +12,7 @@ import cookieParser from 'cookie-parser'
 import config from "./config/config.js";
 import errorMiddleware from "./middlewares/errors/index.js";
 import {addLogger} from "./config/logger.js";
-
+import cors from 'cors'
 
 const server = express()
 
@@ -35,7 +35,7 @@ server.use(morgan('dev'))
 initializePassport()
 server.use(passport.initialize())
 server.use(addLogger)
-
+server.use(cors())
 
 server.use('/', index_router)
 server.use(errorMiddleware)

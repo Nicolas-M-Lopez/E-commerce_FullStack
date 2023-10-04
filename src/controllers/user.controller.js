@@ -3,6 +3,9 @@ import config from '../config/config.js'
 import UserDTO from '../dto/user.dto.js'
 import { logger } from '../config/logger.js'
 import UserModel from '../dao/Mongo/models/user.model.js'
+import { userService } from '../services/index.js'
+
+const userDao = userService
 
 class UserController{
     register = (req,res) => res.status(201).json({
@@ -56,6 +59,15 @@ class UserController{
         let user = new UserDTO({email: req.user.email})
         logger.info(user)
         res.json({ user })
+    }
+
+    getAllUsers = async(req,res) =>{
+        return res.json(await userDao.getUsers())
+    }
+
+    deleteUsers = async(req,res) => {
+        userDao.deleteUsers()
+        return res.json('All inactive users have been deleted')
     }
 }
 
