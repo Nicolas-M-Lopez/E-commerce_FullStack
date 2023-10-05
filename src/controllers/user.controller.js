@@ -56,13 +56,17 @@ class UserController{
     })
 }
     current = (req, res) => {
-        let user = new UserDTO({email: req.user.email})
+        let user = new UserDTO({email: req.user.email, role: req.user.role})
         logger.info(user)
         res.json({ user })
     }
 
     getAllUsers = async(req,res) =>{
         return res.json(await userDao.getUsers())
+    }
+
+    getUserByEmail = async(req,res) => {
+        return res.json(await userDao.getUser(req.email))
     }
 
     deleteUsers = async(req,res) => {

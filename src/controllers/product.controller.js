@@ -1,11 +1,12 @@
 import { logger } from "../config/logger.js";
-import { productService } from "../services/index.js";
+import sendMailDeleteProd from "../middlewares/sendMailDeletedProd.js";
+import { productService, userService } from "../services/index.js";
 import CustomError from "../utils/error/customError.js";
 import EErrors from "../utils/error/enums.js";
 import generateProductErrorInfo from "../utils/error/info.js";
 
 const productDao = productService
-
+const userDao = userService
 class ProductController {
     getProducts = async(req,res,next)=>{
         try{
@@ -80,6 +81,12 @@ class ProductController {
         try{
             let pid = req.params.pid
             let deleteProduct = await productDao.deleteProduct(pid)
+            let userProductDeleted = await userDao.getUser(deleteProduct.owner)
+            if(userProductDeleted.role != "admin"){
+                const email = userProductDeleted.email
+                const product = deleteProduct.title
+                sendMailDeleteProd(email,product)
+            }
             if (deleteProduct) {
                 return res.json({ status:200,message:'product deleted'})
             }
