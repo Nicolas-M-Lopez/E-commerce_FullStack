@@ -16,11 +16,17 @@ class UserRepository{
     }
     getUsers = async()=>{
         let result = await this.dao.getAll()
+        console.log(result)
         return result
     }
 
     deleteUsers = async()=>{
         let result = await this.dao.delete()
+        return result
+    }
+
+    deleteUser = async(uid)=>{
+        let result = await this.dao.deleteBy(uid)
         return result
     }
 }

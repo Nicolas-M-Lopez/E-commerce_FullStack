@@ -73,6 +73,11 @@ class UserController{
         userDao.deleteUsers()
         return res.json('All inactive users have been deleted')
     }
+
+    deleteUser = async(req,res) => {
+        userDao.deleteUser(req.params.uid)
+        return res.status(200).json('Usuario eliminado correctamente')
+    }
 }
 
 export default new UserController()

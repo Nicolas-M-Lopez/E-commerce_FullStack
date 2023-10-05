@@ -9,7 +9,7 @@ import passport_call from "../../middlewares/passport_call.js";
 import authorizationJwt from "../../middlewares/authorizationJwt.js";
 import userController from "../../controllers/user.controller.js";
 import { userService } from "../../services/index.js";
-import uploader from "../../middlewares/multer.js";
+import {uploader, uploadDocuments} from "../../middlewares/multer.js";
 import checkAndUpgradeToPremium from "../../middlewares/checkFiles.js";
 
 const auth_router = Router()
@@ -46,16 +46,18 @@ auth_router.get('/premium/:uid',checkAndUpgradeToPremium,async(req,res,next)=>{
     }
 })
 
-auth_router.post('/:uid/documents', uploader.any(), (req,res,next) => {
+auth_router.post('/:uid/documents', uploader.any(),uploadDocuments, (req,res,next) => {
     try {
-        res.json({message: 'exito'})
+        res.status(200).json({message: 'exito'})
     } catch (error) {
         next(error)
     }  
 })
 
-auth_router.get('/', userController.getAllUsers)
+auth_router.get('/',userController.getAllUsers)
 
 auth_router.delete('/', userController.deleteUsers)
+
+auth_router.delete('/:uid', userController.deleteUser)
 
 export default auth_router
