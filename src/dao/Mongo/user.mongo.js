@@ -20,7 +20,7 @@ class UserDaoMongo {
     }
 
     getAll = async() =>{
-        return await UserModel.find({}, 'first_name email role')
+        return await UserModel.find({}, 'first_name email role documents')
     }
 
     delete = async()=>{
@@ -35,6 +35,10 @@ class UserDaoMongo {
             return inactiveUsers
         }
         return []
+    }
+
+    deleteBy = async(uid)=>{
+        return await UserModel.findByIdAndDelete(uid)
     }
 }
 

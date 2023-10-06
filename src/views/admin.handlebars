@@ -1,0 +1,74 @@
+<div class="contaniner text-center">
+<div class="row justify-content-evenly">
+{{#each users}}
+<div class="card col-6" style="width: 30rem; margin: 2rem">
+  <div class="card-body">
+    <h5 class="card-title">Email: {{this.email}}</h5>
+    <h6 class="card-title">Nombre: {{this.first_name}}</h6>
+    <h6 class="card-title">Apellido: {{this.last_name}}</h6>
+    <h6 class="card-title">Rol: {{this.role}}</h6>
+    <h6 class="card-title">Documentos:</h6>
+    <ul>
+        {{#each this.documents}}
+            <li>Nombre: {{this.name}}</li>
+        {{/each}}
+    </ul>
+    <h6 class="card-title id" data-id="{{this.productId._id}}" >{{this.productId._id}}</h6>
+    <input class="form-control" id="_id" value="{{this._id}}" hidden>
+    <button id="delete_user" class="btn btn-danger" style="margin-top: 10px;">Eliminar</button>
+    {{#if this.documents}}
+        <button id="change_role" class="btn btn-success" style="margin-top: 10px;">Cambiar Rol</button>
+    {{/if}}
+  </div>
+</div>
+{{/each}}
+</div>
+</div>
+<script>
+
+const changeRole = document.querySelectorAll('#change_role');
+const deleteUser = document.querySelectorAll('#delete_user');
+
+changeRole.forEach((btn, index) => {
+  btn.addEventListener('click', async () => {
+    const inputId = document.querySelectorAll('#_id')[index];
+    const uid = inputId.value
+      try {
+        const response = await fetch(`/api/auth/premium/${uid}`, { method: 'GET' });
+        console.log(response.status)
+        if (response.status === 200) {
+          const result = await response.json();
+          console.log('Rol cambiado con exito:', result);
+          location.reload();
+        } else {
+          console.error('Error al cambiar el rol');
+        }
+      } catch (error) {
+        console.error('Error de conexión al cambiar el rol:', error);
+      }
+  });
+});
+
+
+deleteUser.forEach((btn, index) => {
+  btn.addEventListener('click', async () => {
+    const inputId = document.querySelectorAll('#_id')[index];
+    const uid = inputId.value
+      try {
+        const response = await fetch(`/api/auth/${uid}`, { method: 'DELETE' });
+        if (response.status === 200) {
+          const result = await response.json();
+          console.log('Usuario eliminado correctamente', result);
+          location.reload();
+        } else {
+          console.error('Error al eliminar al usuario');
+          location.reload();
+        }
+      } catch (error) {
+        console.error('Error de conexión al eliminar usuario:', error);
+        location.reload();
+      }
+  });
+});
+
+</script>
