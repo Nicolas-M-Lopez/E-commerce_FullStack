@@ -10,6 +10,7 @@ const schema = new Schema({
     password: { type: String, required:true },
     cart: {type: String},
     last_connection: {type: Date},
+    cart_owned: {type: String},
     documents: [{
         name: {type: String},
         reference: {type: String}

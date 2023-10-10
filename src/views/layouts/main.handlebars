@@ -16,14 +16,23 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="http://localhost:8080">Home</a>
-        <a class="nav-link" href="http://localhost:8080/products">Vehiculos</a>
-        <a class="nav-link" href="http://localhost:8080/carts/6480e25e369065f0073640e0">Carrito</a><span>{{cart}}</span>
-        <a class="nav-link" href="http://localhost:8080/new_product">Stock Management</a></span>
-        <a class="nav-link" href="http://localhost:8080/chatbot">Chat</a></span>
-        <a class="nav-link" href="http://localhost:8080/register">Registro de usuarios</a></span>
-        <a class="nav-link" href="http://localhost:8080/signin">Inicio de sesion</a></span>
-        <a class="nav-link" href="http://localhost:8080/logout">Cerrar sesión</a>
+        
+        {{#if userActive}}
+        <a class="btn btn-success" href="http://localhost:8080/products">Vehiculos</a>
+        <a class="btn btn-success" href="http://localhost:8080/new_product">Stock Management</a></span>
+        <a class="btn btn-warning" href="http://localhost:8080/delete_product">Delete Stock</a></span>
+        {{#if cart}}
+        <a href='http://localhost:8080/carts/{{cart}}' class="btn btn-info">Carrito</a>
+        <a class="btn btn-light" href="http://localhost:8080/profile/{{cartUser}}">Perfil</a>
+        {{/if}}
+        <a class="btn btn-dark" href="http://localhost:8080/admin">Users Management</a>
+        <a class="btn btn-danger" href="http://localhost:8080/logout">Cerrar sesión</a>
+        {{/if}}
+        {{#unless userActive}}
+        <a class="btn btn-success active" aria-current="page" href="http://localhost:8080">Home</a>
+        <a class="btn btn-success" href="http://localhost:8080/signin">Inicio de sesion</a></span>
+        <a class="btn btn-success" href="http://localhost:8080/register">Registrarse</a></span>
+        {{/unless}}
       </div>
     </div>
   </div>
@@ -34,5 +43,6 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>
+
 
 

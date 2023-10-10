@@ -6,7 +6,7 @@
     </div>
     <div class="col-md-6" >
       <label for="password" class="form-label">Contraseña</label>
-      <input type="text" class="form-control" id="password" minlength="8" name="password" required>
+      <input type="password" class="form-control" id="password" minlength="8" name="password" required>
     </div>
     <div class="col-12">
       <button type="submit" id="liveAlertBtn" class="btn btn-primary">Submit</button>
@@ -36,10 +36,10 @@ let data = {
         .then(res => {
       if (res.token) {
         alert('¡Usuario logueado correctamente!');
-        window.location.href = 'http://localhost:8080'; // Redirige a localhost:8080
+        window.location.href = 'http://localhost:8080'; 
       } else {
         alert('Algo salió mal. Por favor, verifique sus credenciales.');
-        registerForm.reset(); // Refresca el formulario
+        registerForm.reset();
       }
     })
     .catch(err => {

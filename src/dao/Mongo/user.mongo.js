@@ -1,6 +1,6 @@
-import { response } from "express";
 import UserModel from "./models/user.model.js";
 import sendMailDelete from "../../middlewares/sendMailDeletedAcc.js";
+
 class UserDaoMongo {
     constructor() {
         this.UserModel = UserModel

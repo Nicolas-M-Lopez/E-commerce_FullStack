@@ -39,7 +39,7 @@ auth_router.get('/current',passport_call('jwt'),authorizationJwt('admin'), userC
 auth_router.get('/premium/:uid',checkAndUpgradeToPremium,async(req,res,next)=>{
     try {
         const uid = req.params.uid
-        const changeRoles = await userService.changeRole(uid)
+        await userService.changeRole(uid)
         return res.status(200).json({message: "Rol cambiado"})
     } catch (error) {
         next(error)
@@ -55,6 +55,8 @@ auth_router.post('/:uid/documents', uploader.any(),uploadDocuments, (req,res,nex
 })
 
 auth_router.get('/',userController.getAllUsers)
+
+auth_router.get('/:email',userController.getUserByEmail)
 
 auth_router.delete('/', userController.deleteUsers)
 

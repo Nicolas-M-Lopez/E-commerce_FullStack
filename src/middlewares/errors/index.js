@@ -1,7 +1,6 @@
 import EErrors from "../../utils/error/enums.js"
 
 const errorMiddleware = (error,req,res,next) =>{
-    console.log(error.cause)
     switch (error.code) {
         case EErrors.INVALID_TYPE_ERROR:
             return res.send({status: 'error', error: error.name})

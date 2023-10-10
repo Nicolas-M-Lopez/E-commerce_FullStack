@@ -8,13 +8,14 @@ import UserDTO from "../dto/user.dto.js";
 import CustomError from "../utils/error/customError.js";
 import EErrors from "../utils/error/enums.js";
 import generateUserErrorInfo from "../utils/error/generateUserErrorInfo.js";
+import CartModel from "../dao/Mongo/models/cart.model.js";
 
 const callback = "http://localhost:8080/api/auth/github/callback"
 
 export default function initializePassport(){
     passport.serializeUser(
         (user,done)=> done(null,user._id) //SI existe el usario guarda el id en una sesion
-        )
+        ) 
     passport.deserializeUser(
         async(id,done)=>{
             const user = await UserModel.findById(id)
@@ -43,6 +44,8 @@ export default function initializePassport(){
                         }
                         let newUser = new UserDTO({first_name,last_name,email,age,password})
                         let user = await UserModel.create(newUser)
+                        let newCart = await CartModel.create({productos:[],owner:user._id})
+                        await UserModel.findByIdAndUpdate(user._id,{cart_owned: newCart._id})
                         delete user.password        //para el registro no es necesario continuar/inyectar la contraseña a la propeidad user del objeto de requerimientos
                         return done(null,user)
                     }

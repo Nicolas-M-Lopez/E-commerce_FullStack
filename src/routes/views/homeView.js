@@ -1,12 +1,16 @@
 import { Router } from "express";
+import passport_call from "../../middlewares/passport_call.js";
 
 const home_view_router = Router()
 
-home_view_router.get('/', async(req,res,next) => {
+home_view_router.get('/',async(req,res,next) => {
     try {
-        const response = await fetch(`http://localhost:8080/api/carts/6480e25e369065f0073640e0`)
-        const data = await response.json()
-        return res.render('home', {})
+        const userActive = req.cookies.token
+        const home = true
+        return res.render('home', {
+          userActive,
+          home
+        })
     } catch (error) {
       next(error)  
     }

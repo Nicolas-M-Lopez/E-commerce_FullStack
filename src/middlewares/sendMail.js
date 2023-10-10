@@ -17,7 +17,9 @@ let sendMail = async(ticketData) =>{
         subject: 'Compra en Commerce',
         html:`<h1>Su compra se realizo con exito</h1>
         <div>
+            <h2>${ticketData.productos}</h2>
             <h3>$${ticketData.amount}USD</h3>
+            <h5>Codigo del ticket: ${ticketData.code}</h5>
         </div>`
     })
 }

@@ -1,0 +1,39 @@
+<div class="container text-center justify-content-center align-items-center">
+  <div class="card" style="width: 30rem; margin:auto">
+    <div class="card-body">
+      <h5 class="card-title">{{usuario.first_name}}</h5>
+      <h5 class="card-text">{{usuario.last_name}}</h5>
+      <h6>Email: {{usuario.email}}</h6>
+      <h6>Rol: {{usuario.role}}</h6>
+      <h6>Documentos de perfil: {{usuario.document}}</h6>
+      <input type="file" class="form-control" id="documentsInput">
+    </div>
+  </div>
+</div>
+
+<script>
+  const documentsInput = document.getElementById('documentsInput');
+
+  documentsInput.addEventListener('change', async (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append('document', file);
+
+    try {
+    const uid = '{{usuario._id}}'
+      const response = await fetch(`/api/auth/${uid}/documents`, {
+        method: 'POST',
+        body: formData,
+      });
+      if (response.ok) {
+        alert('Documento subido correctamente.');
+         location.reload();
+      } else {
+        alert('Error al subir el documento:', response.statusText);
+         location.reload();
+      }
+    } catch (error) {
+      alert('Error de red al subir el documento:', error);
+    }
+  });
+</script>

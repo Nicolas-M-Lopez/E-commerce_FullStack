@@ -19,7 +19,6 @@ const transport = nodemailer.createTransport({
 
 const sendNewPass = (email) =>{
     const token = tokenPass(email)
-console.log(token)
     const mailOptions = {
         from: 'Commerce <nicolasmlopez00@gmail.com>',
         to: `${email}`,

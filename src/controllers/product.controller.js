@@ -86,6 +86,7 @@ class ProductController {
                 const email = userProductDeleted.email
                 const product = deleteProduct.title
                 sendMailDeleteProd(email,product)
+                return res.json({ status:200,message:'product deleted'})
             }
             if (deleteProduct) {
                 return res.json({ status:200,message:'product deleted'})

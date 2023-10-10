@@ -1,4 +1,3 @@
-import { response } from "express";
 import ProductModel from "./models/product.model.js"
 class ProductDaoMongo {
     constructor() {
