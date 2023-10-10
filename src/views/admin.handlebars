@@ -35,16 +35,15 @@ changeRole.forEach((btn, index) => {
     const uid = inputId.value
       try {
         const response = await fetch(`/api/auth/premium/${uid}`, { method: 'GET' });
-        console.log(response.status)
         if (response.status === 200) {
           const result = await response.json();
-          console.log('Rol cambiado con exito:', result);
+          alert('Rol cambiado con exito:', result);
           location.reload();
         } else {
-          console.error('Error al cambiar el rol');
+          alert('Error al cambiar el rol');
         }
       } catch (error) {
-        console.error('Error de conexión al cambiar el rol:', error);
+        alert('Error de conexión al cambiar el rol:', error);
       }
   });
 });
@@ -58,14 +57,14 @@ deleteUser.forEach((btn, index) => {
         const response = await fetch(`/api/auth/${uid}`, { method: 'DELETE' });
         if (response.status === 200) {
           const result = await response.json();
-          console.log('Usuario eliminado correctamente', result);
+          alert('Usuario eliminado correctamente', result);
           location.reload();
         } else {
-          console.error('Error al eliminar al usuario');
+          alert('Error al eliminar al usuario');
           location.reload();
         }
       } catch (error) {
-        console.error('Error de conexión al eliminar usuario:', error);
+        alert('Error de conexión al eliminar usuario:', error);
         location.reload();
       }
   });

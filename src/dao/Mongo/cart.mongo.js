@@ -21,8 +21,8 @@ class CartDaoMongo {
     getById = async(cid) =>{
         return await CartModel.findById(cid).populate('productos.productId', 'title price _id')
     }
-    create = async() =>{
-        return await CartModel.create({productos:[]})
+    create = async(uid) =>{
+        return await CartModel.create({productos:[]},{owner:toString(uid)})
     }
     update = async(cid,dataProduct,dataUnits) =>{
         const cart = await CartModel.findById(cid);
@@ -39,10 +39,8 @@ class CartDaoMongo {
         }
     }
     delete = async(cid,dataProduct,dataUnits) =>{
-        console.log(dataProduct)
         const cart = await CartModel.findById(cid)
         const product = cart.productos.find((product) => product.productId.equals(dataProduct));
-        console.log(product)
         if (!product) {
             return logger.warning('No encontrado')
           }
@@ -74,11 +72,13 @@ class CartDaoMongo {
         const ticketData = {
           code:generateRandomCode(),
           amount: totalAmount,
-          purchaser: tokenEmail
+          purchaser: tokenEmail,
+          productos: cart.productos
         }
           const ticket = await TicketModel.create(ticketData)
           await sendMail(ticketData)
           logger.info('Ticket creado correctamente: ', ticket)
+          return ticket
     }
 
     getBill = async(cid)=>{

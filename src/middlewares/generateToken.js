@@ -7,7 +7,6 @@ export default (req,res,next) => {
         config.SECRET_COOKIE,
         { expiresIn:60*60*24 }
     )
-    
     req.token = token
     return next()
 }

@@ -28,6 +28,3 @@ function send (e){
     }
 }
 
-socket.on('allMessages', data =>{
-    document.getElementById('messagess').innerHTML = data.map(message => `<br><b>${message.userName}</b>: ${message.message}`).join('')
-})

@@ -1,23 +1,31 @@
 import { Router } from "express";
+import passport_call from "../../middlewares/passport_call.js";
+import authorizationJwt from "../../middlewares/authorizationJwt.js";
 
 const cart_view_router = Router()
 
-cart_view_router.get('/:cid', async (req,res,next) => {
+cart_view_router.get('/:cid', passport_call('jwt'),authorizationJwt(['admin','premium','user']),async (req,res,next) => {
     try {
-        const response = await fetch(`http://localhost:8080/api/carts/6480e25e369065f0073640e0`)
+        const userActive = req.user.email
+        const cartOwn = req.user.cart_owned
+        const cartUser = req.user.email
+        const id = req.params.cid
+        const response = await fetch(`http://localhost:8080/api/carts/${id}`)
         const data = await response.json()
-        console.log(response,'++')
-        const responseTotal = await fetch(`http://localhost:8080/api/carts/bills/6480e25e369065f0073640e0`)
+        const responseTotal = await fetch(`http://localhost:8080/api/carts/bills/${id}`)
         const dataTotal = await responseTotal.json()
-        /* console.log(data.response.productos) */
         return res.render(
             'cart',
             {
                 productos: data.response.productos,
                 title: "carrito",
-                total: dataTotal.response
+                total: dataTotal.response,
+                cart: cartOwn,
+                userActive,
+                cartUser
             }
             )
+            
     } catch (error) {
         next(error)
     }

@@ -82,16 +82,16 @@ class CartController{
             const token = req.cookies.token
             const decodedToken = jwt.verify(token, config.SECRET_COOKIE);
             const tokenEmail = decodedToken.email;
-            const purchase = await cartDao.purchaseCart(cid,tokenEmail)
-            console.log(purchase)
-            if(purchase){ 
-            return res.status(201).json({
+            let purchase = await cartDao.purchaseCart(cid,tokenEmail)
+            logger.info(purchase)
+            if(purchase){
+            return res.status(200).json({
                     succes: true,
                     response: purchase
                 })
             }
         } catch (error) {
-            logger.error(error)
+            logger.error(error) 
             next(error)
         }
     }

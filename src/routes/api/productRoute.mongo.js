@@ -9,10 +9,10 @@ product_router.get('/',productController.getProducts)
 
 product_router.get('/:pid',productController.getProduct)
 
-product_router.post('/',passport_call('jwt'),authorizationJwt(['admin','premium']), productController.createProduct)
+product_router.post('/', passport_call('jwt'),authorizationJwt(['admin','premium']), productController.createProduct)
 
 product_router.put('/:pid',passport_call('jwt'),authorizationUD(['admin','premium']), productController.updateProduct)
 
-product_router.delete('/:pid',passport_call('jwt'),authorizationUD(['admin','premium']), productController.deleteProduct)
+product_router.delete('/:pid',passport_call('jwt'),authorizationUD(['admin']), productController.deleteProduct)
 
 export default product_router

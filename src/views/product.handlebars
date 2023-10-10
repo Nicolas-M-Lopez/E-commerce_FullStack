@@ -5,7 +5,7 @@
       <p class="card-text">{{one.description}}</p>
       <h6>Price: ${{one.price}}</h6>
       <h6>Stock: {{one.stock}}</h6>
-      <h6>Stock: {{one._id}}</h6>
+      <h6 hidden>Stock: {{one._id}}</h6>
       <label for="unit" class="form-label">Cantidad</label>
         <input type="number" class="form-control" id="unit" min="1" max="{{one.stock}}" required>
       <button id="add-to-cart-btn" class="btn btn-primary" style="margin-top: 10px;">Agregar al carrito</button>
@@ -21,26 +21,26 @@ const addToCartBtn = document.querySelector('#add-to-cart-btn');
 addToCartBtn.addEventListener('click', () => {
   const units = Number(unitsInput.value);
   let id = '{{one._id}}'
+  let cid = '{{cart}}'
   const stock = Number({{one.stock}})
-  const actionUrl = `/api/carts/6480e25e369065f0073640e0/products/${id}/${units}`;
- console.log(id,stock, units)
+  const actionUrl = `/api/carts/${cid}/products/${id}/${units}`;
   const xhr = new XMLHttpRequest();
-  if(units >= 1 && units < stock ){
+  if(units >= 1 && units <= stock && '{{one.owner}}' != '{{user}}'){
   xhr.open('PUT', actionUrl);
   xhr.setRequestHeader('Content-Type', 'application/json');
   xhr.onreadystatechange = function() {
     if (xhr.readyState === XMLHttpRequest.DONE) {
       if (xhr.status === 200) {
-        console.log('Producto agregado al carrito exitosamente');
-        window.location.href = 'http://localhost:8080/carts/6480e25e369065f0073640e0';
+        alert('Producto agregado al carrito exitosamente');
+        window.location.href = `http://localhost:8080/carts/${cid}`;
       } else {
-        console.error('Error al agregar el producto al carrito');
+       alert('Error al agregar el producto al carrito');
       }
-    
     }
   }
   xhr.send();
   } else{
+    alert('Recordatorio: No excederse del stock y No se puede autocomprar su producto')
     window.location.href = `http://localhost:8080/products/${id}`
   }
   

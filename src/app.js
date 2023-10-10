@@ -1,6 +1,5 @@
 import express from "express";
 import morgan from "morgan"
-import error_handler from "./middlewares/error_handler.js";
 import not_found_handler from "./middlewares/not_found_handler.js";
 import index_router from "./routes/index.js";
 import { __dirname } from "./utils.js";
@@ -13,6 +12,7 @@ import config from "./config/config.js";
 import errorMiddleware from "./middlewares/errors/index.js";
 import {addLogger} from "./config/logger.js";
 import cors from 'cors'
+
 
 const server = express()
 

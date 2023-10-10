@@ -5,7 +5,7 @@
   <div class="card-body">
     <h5 class="card-title">{{this.productId.title}}</h5>
     <h6 class="card-title">Cantidad actual: {{this.quantity}}</h6>
-    <h6 class="card-title id" data-id="{{this.productId._id}}" >{{this.productId._id}}</h6>
+    <h6 class="card-title id" data-id="{{this.productId._id}}" hidden>{{this.productId._id}}</h6>
     <input class="form-control" id="_id" value="{{this.productId._id}}" hidden>
     <label for="quantity" class="form-label">Cantidad</label>
       <input type="number" class="form-control" id="quantity"  required>
@@ -14,14 +14,15 @@
   </div>
 </div>
 {{/each}}
-<h6>Total: ${{total}}</h6> 
+<h6>Total: ${{total}}</h6>
 </div>
+<button id="purchase" class="btn btn-warning" style="width: 100px; height: 70px; block:true">Confirmar Compra</button> 
 </div>
 <script>
 
 const addToCartBtns = document.querySelectorAll('#add-to-cart-btn');
 const deleteToCartBtns = document.querySelectorAll('#delete-to-cart-btn');
-
+const purchaseBtns = document.querySelectorAll('#purchase');
 
 addToCartBtns.forEach((btn, index) => {
   btn.addEventListener('click', async () => {
@@ -29,25 +30,26 @@ addToCartBtns.forEach((btn, index) => {
     const quantity = parseInt(input.value);
     const inputId = document.querySelectorAll('#_id')[index];
     const id = inputId.value
+    const cid = '{{cart}}'
     if (quantity >= 1) {
       try {
-        const response = await fetch(`/api/carts/6480e25e369065f0073640e0/products/${id}/${quantity}`, { method: 'PUT' });
+        const response = await fetch(`/api/carts/${cid}/products/${id}/${quantity}`, { method: 'PUT' });
         if (response.status === 200) {
           const result = await response.json();
-          console.log('Producto agregado al carrito:', result);
+          alert('Producto agregado al carrito:', result);
           location.reload();
           input.value = '';
         } else {
-          console.error('Error al agregar el producto al carrito');
+          alert('Error al agregar el producto al carrito');
           location.reload();
         }
       } catch (error) {
-        console.error('Error de conexión al agregar el producto al carrito:', error);
+        alert('Error de conexión al agregar el producto al carrito:', error);
         location.reload();
 
       }
     } else {
-      console.error('La cantidad no es válida');
+      alert('La cantidad no es válida');
       location.reload();
     }
   });
@@ -60,30 +62,62 @@ deleteToCartBtns.forEach((btn, index) => {
     const quantity = parseInt(input.value);
     const inputId = document.querySelectorAll('#_id')[index];
     const id = inputId.value
-  
+    const cid = '{{cart}}'
     if (quantity >= 1) {
       try {
-        const response = await fetch(`/api/carts/6480e25e369065f0073640e0/products/${id}/${quantity}`, { method: 'DELETE' });
+        const response = await fetch(`/api/carts/${cid}/products/${id}/${quantity}`, { method: 'DELETE' });
         if (response.status === 200) {
           const result = await response.json();
-          console.log('Producto eliminado del carrito:', result);
+          alert('Producto eliminado del carrito:', result);
           location.reload();
           input.value = '';
         } else {
-          console.error('Error al eliminar el producto del carrito');
+          alert('Error al eliminar el producto del carrito');
           location.reload();
 
         }
       } catch (error) {
-        console.error('Error de conexión al eliminar el producto del carrito:', error);
+        alert('Error de conexión al eliminar el producto del carrito:', error);
         location.reload();
 
       }
     } else {
-      console.error('La cantidad no es válida');
+      alert('La cantidad no es válida');
       location.reload();
     }
   });
 });
+
+
+purchaseBtns.forEach((btn, index) => {
+  btn.addEventListener('click', async () => {
+    const totalCompra = Number({{total}});
+    if (totalCompra > 0) {
+      try {
+        const cid = '{{cart}}';
+        const actionUrl = `http://localhost:8080/api/carts/${cid}/purchase`;
+        const response = await fetch(actionUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log(response)
+        if (response) {
+          alert('Carrito comprado exitosamente, se le enviara el ticket por mail');
+          window.location.href = `http://localhost:8080`;
+        } else {
+          alert('Error al comprar');
+        }
+      } catch (error) {
+        alert('Error al comprar:', error);
+      }
+    } else {
+      alert('El carrito esta vacio')
+       window.location.href = 'http://localhost:8080/products';
+    }
+  });
+});
+
 
 </script>

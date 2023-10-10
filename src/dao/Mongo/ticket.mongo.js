@@ -15,6 +15,17 @@ class TicketDaoMongo {
       throw new Error("Error creating ticket: " + error.message);
     }
   }
+
+   show = async(tid) => {
+    try {
+      const ticket = await this.TicketModel.findOne({_id:tid});
+      console.log(ticket)
+      return ticket;
+    } catch (error) {
+      logger.warning(error)
+      throw new Error("Error al ver el ticket: " + error.message);
+    }
+  }
 }
 
 export default TicketDaoMongo;

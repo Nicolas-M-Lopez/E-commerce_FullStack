@@ -34,10 +34,10 @@ class UserController{
         let user = {
             email: req.body.email,
             role: req.user.role,
-            _id: req.user._id
+            _id: req.user._id,
+            cart_owned: req.user.cart_owned
         }
         let token = jwt.sign(user, config.SECRET_COOKIE, { expiresIn:60*60*24 })
-        console.log(req.user._id)
         await UserModel.findByIdAndUpdate(req.user._id, { last_connection: new Date() });
         logger.info(token)
         res.cookie('token',token).send({token})
@@ -60,13 +60,13 @@ class UserController{
         logger.info(user)
         res.json({ user })
     }
-
+    
     getAllUsers = async(req,res) =>{
         return res.json(await userDao.getUsers())
     }
 
     getUserByEmail = async(req,res) => {
-        return res.json(await userDao.getUser(req.email))
+        return res.json(await userDao.getUser(req.params.email))
     }
 
     deleteUsers = async(req,res) => {

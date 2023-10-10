@@ -13,7 +13,6 @@ reset_pass_router.get('/',passport_call('jwt'), async(req,res,next) => {
         await sendNewPass(req.user.email)
         return res.status(200).json({succes: true, message:"Email enviado"})
     } catch (error) {
-        console.log(error)
         next(error)
     }
 })

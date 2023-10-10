@@ -1,7 +1,7 @@
 import { Router } from "express";
 import generateMockProduct from "../../utils/mocks/generateMockProduct.js";
 
-let mocking_router = Router()
+let mocking_router = Router() //Generador automatico de Productos de prueba
 
 mocking_router.get('/',async(req,res,next)=>{
     try {

@@ -7,7 +7,6 @@
   <div class="row justify-content-evenly">
     {{#each products.docs}}
     <div class="card col-8" style="width: 20rem; margin: 5rem">
-      <img src="..." class="card-img-top" alt="...">
       <div class="card-body">
         <h5 class="card-title">{{this.title}}</h5>
         <p class="card-text">{{this.description}}</p>
@@ -28,7 +27,6 @@
 
 <script>
   const productForm = document.getElementById('productsForm');
-  
   productForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const searchInput = document.getElementById('search');
