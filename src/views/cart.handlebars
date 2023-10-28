@@ -91,30 +91,33 @@ deleteToCartBtns.forEach((btn, index) => {
 
 purchaseBtns.forEach((btn, index) => {
   btn.addEventListener('click', async () => {
-    const totalCompra = Number({{total}});
+    const totalCompra = Number({{total}})
     if (totalCompra > 0) {
       try {
-        const cid = '{{cart}}';
-        const actionUrl = `http://localhost:8080/api/carts/${cid}/purchase`;
+        const cid = '{{cart}}'
+        const actionUrl = `http://localhost:8080/api/carts/${cid}/purchase`
         const response = await fetch(actionUrl, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
           }
         });
-        console.log(response)
         if (response) {
-          alert('Carrito comprado exitosamente, se le enviara el ticket por mail');
-          window.location.href = `http://localhost:8080`;
+          const jsonResponse = await response.json()
+          console.log(jsonResponse.response)
+          const ticketInfo = JSON.stringify(jsonResponse.response, null, 2)
+          alert(`ticket: ${ticketInfo}`)
+          alert('Carrito comprado exitosamente, se le enviara el ticket por mail')
+          window.location.href = `http://localhost:8080`
         } else {
-          alert('Error al comprar');
+          alert('Error al comprar')
         }
       } catch (error) {
-        alert('Error al comprar:', error);
+        alert('Error al comprar:', error)
       }
     } else {
       alert('El carrito esta vacio')
-       window.location.href = 'http://localhost:8080/products';
+       window.location.href = 'http://localhost:8080/products'
     }
   });
 });

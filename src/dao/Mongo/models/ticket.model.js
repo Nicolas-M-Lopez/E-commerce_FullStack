@@ -7,7 +7,7 @@ const schema = new Schema({
     amount: { type: Number },
     purchaser: { type: String },
     productos: [{
-        productId: {type:Types.ObjectId,required:true,ref:'products' },
+        title: {type: String,required:true,ref:'products' },
         quantity: {type: Number, required:true}
     }]
 })

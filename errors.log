@@ -177,3 +177,7 @@ error: undefined
 error: undefined
 error: undefined
 error: undefined
+error: undefined {"_message":"tickets validation failed","errors":{"productos.0.productId":{"kind":"required","message":"Path `productId` is required.","name":"ValidatorError","path":"productId","properties":{"message":"Path `productId` is required.","path":"productId","type":"required"}}}}
+error: undefined {"_message":"tickets validation failed","errors":{"productos.0.productId":{"kind":"required","message":"Path `productId` is required.","name":"ValidatorError","path":"productId","properties":{"message":"Path `productId` is required.","path":"productId","type":"required"}},"productos.1.productId":{"kind":"required","message":"Path `productId` is required.","name":"ValidatorError","path":"productId","properties":{"message":"Path `productId` is required.","path":"productId","type":"required"}}}}
+error: undefined {"_message":"tickets validation failed","errors":{"productos.0.productId":{"kind":"required","message":"Path `productId` is required.","name":"ValidatorError","path":"productId","properties":{"message":"Path `productId` is required.","path":"productId","type":"required"}}}}
+error: undefined {"_message":"tickets validation failed","errors":{"productos.0.title":{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"jeep Grand Cherokee\" (type string) at path \"title\" because of \"BSONError\"","name":"CastError","path":"title","reason":{},"stringValue":"\"jeep Grand Cherokee\"","value":"jeep Grand Cherokee","valueType":"string"}}}

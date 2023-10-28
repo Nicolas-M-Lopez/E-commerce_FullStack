@@ -54,6 +54,7 @@ class CartDaoMongo {
     purchase = async(cid,tokenEmail) => {
         const cart = await CartModel.findById(cid)
         let totalAmount = 0
+        let productosCarrito = cart.productos
         for(const producto of cart.productos) {
           let productToUpdate = await ProductModel.findById(producto.productId)
           let newStock = parseInt(productToUpdate.stock) - parseInt(producto.quantity)
@@ -68,13 +69,34 @@ class CartDaoMongo {
         const generateRandomCode = (length = 10) => {
           const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
           return Array.from({ length }, () => charset[Math.floor(Math.random() * charset.length)]).join('');
-        }; 
+        }
+
+        
+        const getProductNamesAndQuantities = async (productosCarrito) => {
+          const productsWithNames = [];
+        
+          for (const product of productosCarrito) {
+            const productId = product.productId;
+            const quantity = product.quantity;
+            const foundProduct = await ProductModel.findById(productId);
+            if (foundProduct) {
+              productsWithNames.push({
+                title: foundProduct.title,
+                quantity: quantity
+              });
+            }
+          }
+          return productsWithNames
+        }
+      
+        const productosConNombres = await getProductNamesAndQuantities(productosCarrito);
         const ticketData = {
           code:generateRandomCode(),
           amount: totalAmount,
           purchaser: tokenEmail,
-          productos: cart.productos
+          productos: productosConNombres
         }
+        console.log(ticketData)
           const ticket = await TicketModel.create(ticketData)
           await sendMail(ticketData)
           logger.info('Ticket creado correctamente: ', ticket)
